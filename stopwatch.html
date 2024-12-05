@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .stopwatch {
+            text-align: center;
+        }
+
+        #display {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #61dafb;
+            color: #282c34;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #21a1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch">
+        <div id="display">00:00:00</div>
+        <button id="start">Start</button>
+        <button id="pause">Pause</button>
+        <button id="reset">Reset</button>
+    </div>
+    <script>
+        let timer;
+        let startTime;
+        let updatedTime;
+        let difference;
+        let paused = false;
+        let running = false;
+        let display = document.getElementById('display');
+        let startButton = document.getElementById('start');
+        let pauseButton = document.getElementById('pause');
+        let resetButton = document.getElementById('reset');
+
+        function startTimer() {
+            if (!running) {
+                startTime = new Date().getTime();
+                timer = setInterval(updateTime, 10);
+                running = true;
+                paused = false;
+            }
+        }
+
+        function pauseTimer() {
+            if (!paused && running) {
+                clearInterval(timer);
+                paused = true;
+                running = false;
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            display.innerHTML = "00:00:00";
+            running = false;
+            paused = false;
+        }
+
+        function updateTime() {
+            updatedTime = new Date().getTime();
+            difference = updatedTime - startTime;
+
+            let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            let milliseconds = Math.floor((difference % 1000) / 10);
+
+            display.innerHTML = (hours < 10 ? "0" + hours : hours) + ":" +
+                (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                (seconds < 10 ? "0" + seconds : seconds);
+        }
+
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+    </script>
+</body>
+</html>
